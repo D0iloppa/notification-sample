@@ -1,4 +1,3 @@
-
 let wcCookie;
 const COOKIE_NAME = 'wcCookie';
 let cookie_label;
@@ -8,11 +7,7 @@ document.addEventListener("DOMContentLoaded", function(){
   cookie_label = document.getElementById('cookie_label');
 
   getCookieStatus();
-  
-  const msg = wcCookie['id'] ? 
-        ( wcCookie['text'] + "(" + wcCookie['id'] +")" ) : 
-        "쿠키가 존재하지 않습니다.";
-  cookie_label.innerHTML = ('Your cookie value is : ' + msg);
+
 });
 
 
@@ -22,21 +17,21 @@ document.addEventListener("DOMContentLoaded", function(){
 
 
 
-
-function getCookieStatus(){
+function makeCookie(){
   const tmpCookie = getCookie(COOKIE_NAME);
 
   if(tmpCookie) wcCookie = JSON.parse(tmpCookie);
   else wcCookie = false;
 
+  // 쿠키가 없으면 발행
   if(!wcCookie){
       // 개인 식별키 생성
       let tmpId = false;
        
       makeId().then(function(id) {
-        tmpId = id; // response 값 출력
+        tmpId = id; // 개인 식별키는 response 값
 
-        // 쿠키가 없으면 굽는다.
+
         let cookie_obj = {};
         cookie_obj['ip'] = "192.168.0.11";
         cookie_obj['isFirst'] = true;
@@ -44,25 +39,33 @@ function getCookieStatus(){
         cookie_obj['text'] = '쿠키를 생성했습니다.';
         setCookie(COOKIE_NAME , JSON.stringify(cookie_obj) , 1);
         wcCookie = JSON.parse(getCookie(COOKIE_NAME));
-        cookie_label.innerHTML = ('Your cookie value is : ' + wcCookie.text + "(" + wcCookie.id +")" );
+
+        getCookieStatus();
 
       }).catch(function(err) {
+        // 개인 식별키를 발급하지 못 한 경우
         console.log(err);
       });
 
     
   }else{ // 쿠키가 있는 경우
-    if(!wcCookie.isFirst){
-
-    }
-
       wcCookie = JSON.parse(getCookie(COOKIE_NAME));
       wcCookie.text = '쿠키가 존재합니다.';
       wcCookie.isFirst = false;
       setCookie(COOKIE_NAME , JSON.stringify(wcCookie) , 1);
-
-      cookie_label.innerHTML = ('Your cookie value is : ' + wcCookie.text + "(" + wcCookie.id +")" );
   }
+  
+  wait(2);
+  getCookieStatus();
+}
+
+function getCookieStatus(){
+
+  const msg = wcCookie?.id ? 
+  ( wcCookie['text'] + "(" + wcCookie['id'] +")" ) : 
+  "쿠키가 존재하지 않습니다.";
+
+  cookie_label.innerHTML = ('Your cookie value is : ' + msg);
 
 
 }
@@ -112,4 +115,16 @@ function getCookie(cookie_name) {
   function delCookie(){
     // 쿠키의 날짜를 만료시켜서 삭제처리
     document.cookie = COOKIE_NAME + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    wcCookie = false;
+    getCookieStatus();
+
   }
+
+
+
+  function wait(sec) {
+    let start = Date.now(), now = start;
+    while (now - start < sec) {
+        now = Date.now();
+    }
+}

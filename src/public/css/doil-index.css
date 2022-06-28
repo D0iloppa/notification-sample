@@ -1,0 +1,9 @@
+.btn-div{
+    margin-top:auto;
+    margin-bottom:auto;
+    display:flex; 
+    height: 25px;
+}
+.btn-div input{
+    margin-right: 5px;
+}

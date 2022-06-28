@@ -4,12 +4,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css">
+        @import url("/css/doil-index.css");
+    </style>
+
     <script type="text/javascript" src="/script/doil-notification.js"></script>
+    
     <title>Doil Notification SAMPLE PAGE</title>
 </head>
 <body>
-    <h1>Hello, DOIL</h1>
-    <div>
+    <h1>Hello, D0IL</h1>
+    <div style="display:flex;">
+        <div class="btn-div">
+            <input type="button" value="쿠키 생성" onclick="makeCookie()">
+            <input type="button" value="쿠키 삭제" onclick="delCookie()">
+        </div>
         <p id="cookie_label"></p>
     </div>
 </body>
